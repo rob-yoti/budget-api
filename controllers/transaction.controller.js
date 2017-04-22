@@ -82,7 +82,23 @@ function createTransaction(req, res) {
 }
 
 function deleteTransaction(req, res) {
-    Transaction.findByIdAndRemove(req.params.id)
+    let userId = getUserIdFromToken(req.headers.authorization);
+    let transactionId = req.params.id;
+
+    let handleRemoval = function(transaction) {
+        return new Promise((resolve, reject) => {
+            if (userId !== transaction.user.toString()) {
+                return reject('You can not delete another users transaction.');
+            } else {
+                transaction.remove()
+                    .then(() => resolve(transaction))
+                    .catch(reject)
+            }
+        });
+    }    
+
+    Transaction.findById(transactionId)
+        .then(handleRemoval)
         .then(removeTransactionFromUser)
         .then(() => {
             return res.status(200).json({
@@ -90,7 +106,8 @@ function deleteTransaction(req, res) {
             });
         })
         .catch((err) => {
-            return res.status(500).json({
+            let status = err.status || 500;
+            return res.status(status).json({
                 success: false,
                 message: err
             });
