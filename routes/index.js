@@ -1,5 +1,5 @@
 const { registerUser, loginUser } = require('../controllers/auth.controller');
-const { getTransaction, createTransaction } = require('../controllers/transaction.controller');
+const { getTransaction, createTransaction, deleteTransaction } = require('../controllers/transaction.controller');
 const { getUser } = require ('../controllers/user.controller');
 const { getHealthcheck } = require('../controllers/utils.controller');
 
@@ -11,6 +11,7 @@ function router(server) {
     server.get('/api/user', getUser);
 
     server.get('/api/transaction/:id', getTransaction);
+    server.delete('/api/transaction/:id', deleteTransaction);
     server.post('/api/transaction', createTransaction);
 }
 
