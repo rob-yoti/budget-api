@@ -15,6 +15,11 @@ let userSchema = new Schema({
         required: true,
         minlength: 6
     },
+    balance: {
+        type: Number,
+        required: true,
+        default: 0.00
+    },
     transactions: [{
         type: Schema.Types.ObjectId,
         ref: 'Transaction'
