@@ -1,19 +1,16 @@
-const jwt = require('jsonwebtoken');
-
-const { config } = require('../config');
+const { getUserIdFromToken } = require ('./helpers');
 const { User } = require('../models/user.model');
 
-function getUserFromToken(req, res) {
-    let authHeader = req.headers.authorization;
-    let token = authHeader.split(' ')[1];
-    let decoded = jwt.verify(token, config.secret);
-    let userId = decoded.data;
-
-    User.findById(userId)
+function getUser(req, res) {
+    User.findById(getUserIdFromToken(req.headers.authorization))
         .then((user) => {
             return res.status(200).json({
                 success: true,
-                user
+                user: {
+                    username: user.username,
+                    transactions: user.transactions,
+                    balance: user.balance
+                }
             });
         })
         .catch((err) => {
@@ -24,6 +21,22 @@ function getUserFromToken(req, res) {
         })
 }
 
+function addTransactionToUser(user, transaction) {
+    if (transaction.direction === 'egress') {
+        transaction.amount = -Math.abs(transaction.amount);
+    }
+
+    return new Promise((resolve, reject) => {
+        User.findByIdAndUpdate(user, {
+            $push: { transactions: transaction._id },
+            $inc: { balance: transaction.amount }
+        })
+        .then(() => resolve(transaction))
+        .catch((err) => reject(err))
+    });
+}
+
 module.exports = {
-    getUserFromToken
+    getUser,
+    addTransactionToUser
 }

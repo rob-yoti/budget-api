@@ -1,5 +1,6 @@
 const { registerUser, loginUser } = require('../controllers/auth.controller');
-const { getUserFromToken } = require ('../controllers/user.controller.js');
+const { getTransaction, createTransaction } = require('../controllers/transaction.controller');
+const { getUser } = require ('../controllers/user.controller');
 const { getHealthcheck } = require('../controllers/utils.controller');
 
 function router(server) {
@@ -7,7 +8,10 @@ function router(server) {
     server.post('/api/login', loginUser);
     server.get('/api/healthcheck', getHealthcheck);
 
-    server.get('/api/users/me', getUserFromToken);
+    server.get('/api/user', getUser);
+
+    server.get('/api/transaction/:id', getTransaction);
+    server.post('/api/transaction', createTransaction);
 }
 
 module.exports = {
