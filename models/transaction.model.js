@@ -7,7 +7,7 @@ let transactionSchema = new Schema({
         type: String,
         required: true,
         minlength: 3,
-        maxlength: 12
+        maxlength: 25
     },
     direction: {
         type: String,
