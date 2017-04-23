@@ -31,13 +31,11 @@ function setupServer(server) {
 
             // Allow cross-origin requests
             server.use(cors());
-            if (config.environment === 'development') {
-                server.use(function (req, res, next) {
-                    res.header('Access-Control-Allow-Origin', req.headers.origin);
-                    res.header('Access-Control-Allow-Credentials', 'true');
-                    next();
-                });
-            }
+            server.use(function (req, res, next) {
+                res.header('Access-Control-Allow-Origin', req.headers.origin);
+                res.header('Access-Control-Allow-Credentials', 'true');
+                next();
+            });
 
             // Server security
             server.use(helmet());
