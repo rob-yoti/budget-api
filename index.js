@@ -5,7 +5,7 @@ const { config } = require('./config');
 const { setupServer, connectToMongo } = require('./setup');
 
 let app = express();
-let port = process.env.port || config.port;
+let port = process.env.PORT || config.port || 5001;
 
 let startServer = function(server) {
     server.listen(port, () => {
