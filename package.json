@@ -1,8 +1,11 @@
 {
   "name": "budgit-api",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "API for Budgit. Writting in Node/Express",
   "main": "index.js",
+  "engines": {
+    "node": "7.2.0"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },

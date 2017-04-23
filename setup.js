@@ -79,9 +79,10 @@ function setupServer(server) {
 
 function connectToMongo() {
     return new Promise((resolve, reject) => {
-        mongoose.connect(config.databaseUri)
+        let databaseUri = process.env.MONGODB_URI || config.databaseUri;
+        mongoose.connect(databaseUri)
             .then(() => {
-                console.log(chalk.cyan(`MongoDB connection established at ${config.databaseUri}`));
+                console.log(chalk.cyan(`MongoDB connection established at ${databaseUri}`));
                 resolve();
             })
             .catch((err) => {
